@@ -12,8 +12,8 @@ FROM base as deps
 
 WORKDIR /usr/src/app
 
-ADD package.json ./
-RUN npm install --include=dev
+COPY package*.json ./
+RUN npm ci --include=dev
 
 # Setup production node_modules
 FROM base as production-deps
@@ -21,7 +21,7 @@ FROM base as production-deps
 WORKDIR /usr/src/app
 
 COPY --from=deps /usr/src/app/node_modules /usr/src/app/node_modules
-ADD package.json ./
+COPY package*.json ./
 RUN npm prune --omit=dev
 
 # Build the app
@@ -30,8 +30,7 @@ FROM base as build
 WORKDIR /usr/src/app
 
 COPY --from=deps /usr/src/app/node_modules /usr/src/app/node_modules
-
-ADD . .
+COPY . .
 RUN npm run build
 
 # Finally, build the production image with minimal footprint
@@ -40,7 +39,6 @@ FROM base
 WORKDIR /usr/src/app
 
 COPY --from=production-deps /usr/src/app/node_modules /usr/src/app/node_modules
-
 COPY --from=build /usr/src/app/build /usr/src/app/build
 COPY --from=build /usr/src/app/public /usr/src/app/public
 COPY --from=build /usr/src/app/package.json /usr/src/app/package.json

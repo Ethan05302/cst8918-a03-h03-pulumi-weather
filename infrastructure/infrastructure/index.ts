@@ -2,8 +2,7 @@
 import * as resources from '@pulumi/azure-native/resources'
 import * as containerregistry from '@pulumi/azure-native/containerregistry'
 import * as pulumi from '@pulumi/pulumi'
-import * as resources from '@pulumi/azure-native/resources'
-import * as containerregistry from '@pulumi/azure-native/containerregistry'
+
 
 const config = new pulumi.Config()
 const appPath = config.require('appPath')

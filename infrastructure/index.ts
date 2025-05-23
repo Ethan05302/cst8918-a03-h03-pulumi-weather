@@ -48,7 +48,6 @@ const image = new dockerBuild.Image(`${prefixName}-image`, {
     tags: [pulumi.interpolate`${registry.loginServer}/${imageName}:${imageTag}`],
     context: { location: appPath },
     dockerfile: { location: `${appPath}Dockerfile` },
-    target: 'production',
     platforms: ['linux/amd64', 'linux/arm64'],
     push: true,
     buildArgs: {
